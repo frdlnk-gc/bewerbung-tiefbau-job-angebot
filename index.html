@@ -1066,7 +1066,7 @@ function submit(){
   var mail=document.getElementById('fMail').value.trim();
   if(name.length<2) return err('Bitte gib deinen Namen ein.',document.getElementById('fName'));
   if(tel.replace(/\D/g,'').length<7) return err('Bitte gib eine gültige Handynummer ein.',document.getElementById('fTel'));
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(mail)) return err('Bitte gib eine gültige E-Mail-Adresse ein.',document.getElementById('fMail'));
+  if(!/^[^\s@.]+(?:\.[^\s@.]+)*@[^\s@.]+(?:\.[^\s@.]+)*\.[^\s@.]{2,}$/.test(mail)) return err('Bitte gib eine gültige E-Mail-Adresse ein.',document.getElementById('fMail'));
   if(!document.getElementById('fConsent').checked) return err('Bitte bestätige, dass wir dich passenden Betrieben vorschlagen dürfen.');
   S.name=name; S.telefon=tel; S.email=mail;
 
