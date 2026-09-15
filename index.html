@@ -206,6 +206,27 @@ body.funnel-open .ov-head{display:flex}
 .fh-trust{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;margin-top:9px;font-size:12px;font-weight:700;color:var(--ink-soft)}
 .fh-trust span::first-letter{color:#EA580C}
 .funnel-card.done-mode .funnel-head{display:none}
+.funnel-card.done-mode .transparenz{display:none}
+/* Danke-Screen Fassung B (15.09.2026): halb = #F5C518, Markenfarbe erst bei 100 % */
+.funnel-card.half-mode .prog-bar{background:#F5C518}
+.nh{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;padding:2px 4px 10px}
+.nh .saved{display:inline-flex;align-items:center;gap:8px;font-size:13px;white-space:nowrap;font-weight:600;color:var(--ink)}
+.nh .saved .tick{width:22px;height:22px;border-radius:50%;background:#F5C518;color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;flex:none}
+.nh .ring-wrap{position:relative;width:136px;height:136px;margin:2px auto 0}
+.nh .ring{width:136px;height:136px;transform:rotate(-90deg);display:block}
+.nh .ring circle{fill:none;stroke-width:11}
+.nh .ring-track{stroke:#edf0f2}
+.nh .ring-arc{stroke:#F5C518;stroke-linecap:round;stroke-dasharray:364.42;stroke-dashoffset:182.21}
+.screen.active .nh .ring-arc{animation:ringHalf 1s cubic-bezier(.4,0,.2,1) both}
+@keyframes ringHalf{from{stroke-dashoffset:364.42}to{stroke-dashoffset:182.21}}
+.nh .ring-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05}
+.nh .ring-txt b{font-size:31px;font-weight:800;letter-spacing:-.03em;color:var(--ink);font-variant-numeric:tabular-nums}
+.nh .ring-txt .lbl{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-soft);margin-top:3px}
+.nh h2{font-size:21px;font-weight:800;letter-spacing:-.02em;line-height:1.25;text-wrap:balance;max-width:340px}
+.nh h2 .hl{color:var(--primary-text);white-space:nowrap}
+.nh .btn-primary{margin-top:4px;min-height:60px;font-size:17.5px;padding:14px 16px;white-space:nowrap;border-radius:17px;box-shadow:0 14px 34px color-mix(in srgb,var(--primary) 50%,transparent),0 0 0 6px color-mix(in srgb,var(--primary) 12%,transparent)}
+.nh .rest{font-size:13px;font-weight:600;color:var(--ink-soft);margin-top:-4px}
+@media (prefers-reduced-motion: reduce){.screen.active .nh .ring-arc{animation:none}}
 .ssl-hint{text-align:center;font-size:12px;color:var(--ink-soft);font-weight:500;margin-top:11px}
 .prog{margin-bottom:20px}
 .prog-label{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:var(--ink-soft);letter-spacing:.03em;text-transform:uppercase;margin-bottom:7px}
@@ -406,7 +427,7 @@ footer{background:#fff;border-top:1px solid var(--line);padding:30px 16px 34px;t
         <p class="fh-trust"><span>✓ 100&nbsp;% diskret</span><span>✓ Geprüfter Arbeitgeber</span><span>✓ Kostenlos</span></p>
       </div>
       <div class="prog" id="prog">
-        <div class="prog-label"><span id="progStep">Schritt 1 von 3</span></div>
+        <div class="prog-label"><span id="progStep">Schritt 1 von 3</span><span id="progPct"></span></div>
         <div class="prog-track"><div class="prog-bar" id="progBar"></div></div>
       </div>
 
@@ -427,21 +448,21 @@ footer{background:#fff;border-top:1px solid var(--line);padding:30px 16px 34px;t
       <section class="screen" id="s-kontakt"><div id="kontaktMount"></div></section>
 
       <section class="screen" id="s-done">
-        <div class="done">
-          <div class="big">✓</div>
-          <h2>Dein Job-Angebot ist unterwegs!</h2>
-          <p><span id="doneName"></span>Wir prüfen dein Profil und stellen dich passenden Betrieben aus deiner Region vor – dein erstes Job-Angebot bekommst du in unter 7 Tagen.</p>
+        <div class="nh">
+          <p class="saved"><span class="tick">✓</span><span id="doneName">Bewerbung gespeichert.</span></p>
+          <div class="ring-wrap" aria-label="Profil zu 50 Prozent vollständig">
+            <svg class="ring" viewBox="0 0 136 136" aria-hidden="true"><circle class="ring-track" cx="68" cy="68" r="58"/><circle class="ring-arc" cx="68" cy="68" r="58"/></svg>
+            <div class="ring-txt"><b>50 %</b><span class="lbl">vollständig</span></div>
+          </div>
+          <h2><span class="hl">Doppelte Chance,</span> dass sich der passende Betrieb bei dir meldet.</h2>
+          <button type="button" class="btn btn-primary cta-pulse" id="teilbStart">Profil vervollständigen <span class="arrow">→</span></button>
+          <p class="rest">Nur noch 10 Fragen. Dauert unter 1 Minute.</p>
         </div>
         <div class="multi-card multiCard" id="multiCardDone" style="display:none">
           <h3>Weitere Top-Betriebe kennenlernen</h3>
           <p>Sollen wir dein Profil auch anderen geprüften Betrieben in deiner Nähe vorstellen? 100 % diskret.</p>
           <label class="multi-check"><input type="checkbox" class="multiConsent"><span>Ja, mein Profil darf passenden Betrieben in meiner Region vorgestellt werden.</span></label>
           <button type="button" class="btn btn-primary multiBtn" disabled>Weitere Top-Betriebe kennenlernen <span class="arrow">→</span></button>
-        </div>
-        <div class="teilb-card">
-          <h3>Profil vervollständigen</h3>
-          <p>2 schnelle Fragen – damit GreyCareers dir das bestmögliche Angebot machen kann.</p>
-          <button type="button" class="btn btn-primary" id="teilbStart">Jetzt vervollständigen <span class="arrow">→</span></button>
         </div>
       </section>
 
@@ -692,15 +713,16 @@ var NEXT={'s-fach':'s-position','s-position':'s-plz','s-plz':'s-kontakt',
   's-b-benefits':'s-b-scheine','s-b-scheine':'s-b-start','s-b-start':'s-b-situation',
   's-b-situation':'s-b4'};
 var LABELS={'s-fach':'Schritt 1 von 3','s-position':'Schritt 1 von 3','s-plz':'Schritt 2 von 3',
-  's-kontakt':'Schritt 3 von 3','s-done':'Fertig',
+  's-kontakt':'Schritt 3 von 3','s-done':'Dein Profil',
   's-b-quali':'Profil · 1 von 10','s-b-herkunft':'Profil · 2 von 10','s-b-erfahrung':'Profil · 3 von 10',
   's-b-deutsch':'Profil · 4 von 10','s-b-radius':'Profil · 5 von 10','s-b-gehalt':'Profil · 6 von 10',
   's-b-benefits':'Profil · 7 von 10','s-b-scheine':'Profil · 8 von 10','s-b-start':'Profil · 9 von 10',
   's-b-situation':'Profil · 10 von 10','s-b4':'Profil · fast fertig','s-fertig':'Profil komplett'};
-var PROG={'s-fach':10,'s-position':34,'s-plz':62,'s-kontakt':86,'s-done':100,
-  's-b-quali':9,'s-b-herkunft':14,'s-b-erfahrung':22,'s-b-deutsch':31,'s-b-radius':40,
-  's-b-gehalt':49,'s-b-benefits':58,'s-b-scheine':67,'s-b-start':76,'s-b-situation':85,
-  's-b4':93,'s-fertig':100};
+/* Danke-Screen = 50 % (Teil 1 von 2 erledigt), Teil B zählt von 55 bis 100 % weiter */
+var PROG={'s-fach':10,'s-position':34,'s-plz':62,'s-kontakt':86,'s-done':50,
+  's-b-quali':55,'s-b-herkunft':57,'s-b-erfahrung':61,'s-b-deutsch':66,'s-b-radius':70,
+  's-b-gehalt':75,'s-b-benefits':79,'s-b-scheine':84,'s-b-start':88,'s-b-situation':93,
+  's-b4':97,'s-fertig':100};
 var CUR='s-fach', NAV_POP=false, MOUNTED=false, STARTED=false, OVBRAND=false;
 var card=document.getElementById('funnelCard');
 var funnelSec=document.querySelector('.funnel-sec');
@@ -821,6 +843,11 @@ function go(id){
   document.getElementById(id).classList.add('active');
   document.getElementById('progBar').style.width=(PROG[id]||8)+'%';
   document.getElementById('progStep').textContent = LABELS[id]||'';
+  /* Prozentzahl rechts + Halb-Farbe: ab dem Danke-Screen bis zum letzten Teil-B-Schritt; bei 100 % Markenfarbe */
+  var profilPhase = (id==='s-done' || id.indexOf('s-b')===0);
+  var pctEl=document.getElementById('progPct');
+  if(pctEl) pctEl.textContent = (profilPhase || id==='s-fertig') ? (PROG[id]||0)+' %' : '';
+  document.getElementById('funnelCard').classList.toggle('half-mode', profilPhase);
   /* Kopfzeile wechselt in Teil B; auf den Erfolgs-Screens ist sie redundant und weicht den Karten */
   document.getElementById('funnelCard').classList.toggle('done-mode', id==='s-done'||id==='s-fertig');
   if(id==='s-b-gehalt') gehaltVorbelegen();
@@ -1085,7 +1112,7 @@ function submit(){
     .then(function(r){
       if(!r.ok) throw new Error('HTTP '+r.status);
       var vn=S.name.split(' ')[0];
-      document.getElementById('doneName').textContent='Danke, '+vn+'! ';
+      document.getElementById('doneName').textContent='Danke, '+vn+' – Bewerbung gespeichert.';
       /* Meta-Lead NUR nach echtem, erfolgreichem Submit (validierter State) – eventID = lead_id für CAPI-Dedup */
       try{ if(window.fbq) fbq('track','Lead',{},{eventID:LEAD_ID}); }catch(e){}
       try{ sessionStorage.setItem('gcf_used_'+LEAD_ID,'1'); }catch(e){}
